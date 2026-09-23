@@ -338,6 +338,28 @@ curl -s -o /dev/null -w "%{http_code}\n" -L -A "Mozilla/5.0 Chrome/120"  "https:
 > 上表是**平台级**验证（探测平台自身域名），不等于你的站点一定通。
 > 换完宿主**必须**再用 `wechat_check.py` 复验，通过才算数——没验过就不要在回复里写"微信可打开"。
 
+**A2. 让「push 即上线」成立**（省掉每次手动上传，交付/迭代阶段强烈建议先做掉）
+
+| 宿主 | 自动部署前提 | 实测结论 |
+|---|---|---|
+| GitHub Pages | 仓库 Settings → Pages → Source 选 `main` + 根目录（或 `/docs`） | ✅ 设置一次，之后 `git push` 自动重建 |
+| Netlify | 站点必须**关联仓库**且**已装 Netlify GitHub App** | ⚠️ **匿名拖拽建的站点不会**随 `git push` 部署，必须补这一步 |
+
+- **判定 Netlify 是否真接上**：`netlify api listSites` 看该站点 `repo` 字段——
+  为 `null` 就是纯手动站点；`netlify api getSite` 再看 `build_settings.installation_id`，
+  为 `null` 说明 GitHub App 未装。两者都齐才算真自动部署。
+- **补装入口**：<https://github.com/apps/netlify/installations/new> → Only select repositories → 选中该仓库。
+  注意 `updateSite` 写入 `repo_url`/`repo_branch` **不等于**接通（`repo` 仍为 `null`），必须走 App 授权。
+- 先手工拖过一次、事后想转自动部署的站点，**链接域名不变**，不会废掉已发的二维码海报。
+
+**A3. 往 Git 仓库推成品时的两个硬约束**
+
+1. **必须**在仓库根加 `.gitattributes` 写 `index.html -text`。全局 `core.autocrlf=true` 会把成品的
+   CRLF 归一成 LF（实测 377164→374850 字节），线上文件与"已验证过的构建"不再逐字节一致。
+2. **核验远端内容要用 Git 对象 API**：`GET /repos/{owner}/{repo}/git/trees/{branch}?recursive=1`
+   取 `index.html` 的 `size`/`sha`，与本地 `git hash-object` 比对。
+   `raw.githubusercontent.com` 有 CDN 缓存，刚 push 完可能仍返回旧内容，**不要据此判定推送失败**。
+
 **B. 留在默认宿主，改文案** —— 成本最低，但微信内仍需用户手动跳一次：
 - 海报用：`--tip "扫码即玩 · 建议在浏览器打开" --tip2 "微信内请点右上角 ··· → 在浏览器打开"`
 - 回复里必须写明微信内的实际表现，不能含糊过去。

@@ -3,6 +3,28 @@
 <head data-page-node-id="FYgzn9gLGK4XhGOJKGd0lv">
 <meta charset="UTF-8" data-page-node-id="F4YyU0FjsidnlyI2dAnjMS">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" data-page-node-id="6WsNGI5DBovVubcwymFTlj">
+<!-- ===== 微信生态适配（扫码进入 / 内置浏览器打开）=====
+     ① format-detection：知识内容里全是数字和括号，不加这行 iOS 微信会把
+        「(2)」「3:1」之类识别成电话号码/日期，点一下就弹"呼叫"或"添加到日历"。
+     ② X5 meta：安卓微信内置浏览器是腾讯 X5 内核，锁竖屏、全屏、应用模式。
+     ③ 分享卡片：没有 JS-SDK 签名时，微信取 <title> + 本页第一段文字 + 第一张图
+        作为转发卡片；补 og 标签能让分享出去的样子可控一些。 -->
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="screen-orientation" content="portrait">
+<meta name="x5-orientation" content="portrait">
+<meta name="x5-page-mode" content="app">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="browsermode" content="application">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="AI 语音陪学 · 语文/数学/英语闯关 · 微信里扫码即玩，无需下载安装">
+<meta property="og:type" content="website">
+<meta property="og:title" content="小A · 一年级闯关乐园">
+<meta property="og:description" content="AI 语音陪学 · 语文/数学/英语闯关 · 微信里扫码即玩，无需下载安装">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A4%96%3C/text%3E%3C/svg%3E" data-page-node-id="vZVxS422Ys13kReGBmLGf5">
 <title>小A · 一年级闯关乐园</title>
 <style>
@@ -149,6 +171,7 @@ img,svg,video{max-width:100%;height:auto}
 .btn:active{transform:scale(.97)}
 .btn.primary{background:var(--p);color:#fff;box-shadow:0 6px 16px rgba(108,92,231,.3)}
 .btn.ghost{background:#f2effc;color:var(--p)}
+.btn.danger{background:var(--r);color:#fff;box-shadow:0 6px 16px rgba(225,112,85,.3)}
 .btn.sm{flex:none;padding:9px 14px;font-size:13px}
 /* 答题 */
 .qcard .qt{font-size:16px;font-weight:800;line-height:1.6;margin-bottom:16px}
@@ -2301,8 +2324,19 @@ function ttsApplyAge(age){
   const v=m[age]; if(!v) return;
   TTS.rate=v[0]; TTS.pitch=v[1]; ttsSave();
 }
+/* ⚠️ 这里**不能**用原生 confirm 弹窗：iOS 微信的 WKWebView 会静默屏蔽它
+   （不报错、直接返回 false），结果就是用户点「清空进度」后什么都没发生，
+   而且没有任何提示。改为应用内两步确认弹层。 */
 function resetAll(){
-  if(!confirm('确定清空当前账号的全部进度？此操作不可恢复。')) return;
+  openModal('<div class="modal-h">⚠️ 清空进度</div>'
+    +'<div style="padding:4px 20px 16px;font-size:13.5px;color:var(--sub);line-height:1.7">确定清空当前账号的全部进度？此操作不可恢复。</div>'
+    +'<div style="display:flex;gap:10px;padding:0 16px 18px">'
+    +'<div class="btn ghost" onclick="closeModal()">取消</div>'
+    +'<div class="btn danger" onclick="resetAllConfirmed()">确定清空</div>'
+    +'</div>');
+}
+function resetAllConfirmed(){
+  closeModal();
   const id=CUR; USERS=USERS.filter(u=>u.uid!==id); saveUsers();
   localStorage.removeItem('xiaoA_st_'+id);
   CUR=null; ST=null; loadUsers();

@@ -827,7 +827,7 @@ function ttsApplyAge(age){
   const v=m[age]; if(!v) return;
   TTS.rate=v[0]; TTS.pitch=v[1]; ttsSave();
 }
-/* ⚠️ 这里**不能**用 confirm()：iOS 微信的 WKWebView 会静默屏蔽原生弹窗
+/* ⚠️ 这里**不能**用原生 confirm 弹窗：iOS 微信的 WKWebView 会静默屏蔽它
    （不报错、直接返回 false），结果就是用户点「清空进度」后什么都没发生，
    而且没有任何提示。改为应用内两步确认弹层。 */
 function resetAll(){

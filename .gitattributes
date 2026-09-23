@@ -1,0 +1,3 @@
+# index.html 是已构建验证的成品，必须与本地逐字节一致：禁用行尾转换，保留原样
+index.html -text
+.nojekyll -text

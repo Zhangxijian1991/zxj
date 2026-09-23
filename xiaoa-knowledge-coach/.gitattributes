@@ -1,0 +1,7 @@
+# 统一换行：仓库内与工作区都用 LF，避免 Windows 下 CRLF 导致 diff 抖动
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary

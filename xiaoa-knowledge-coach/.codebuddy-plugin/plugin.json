@@ -1,0 +1,40 @@
+{
+  "name": "xiaoa-knowledge-coach",
+  "version": "1.2.0",
+  "description": "Gamified knowledge coach that turns any knowledge base into an interactive level-based quiz H5 with RAG-grounded explanations, adaptive review and learning diagnostics. Delivers a permanent public cloud link (https://<id>.app.workbuddy.link, independent of whether the local machine is on) plus a WeChat-scannable QR poster, is responsive on both PC and mobile, and ships a WeChat readiness check (wechat_check.py) that verifies whether the link actually opens inside WeChat's in-app browser.",
+  "agents": ["./agents/xiaoa-knowledge-coach.md"],
+  "skills": ["./skills/knowledge-to-agent"],
+
+  "expertType": "agent",
+  "agentName": "xiaoa-knowledge-coach",
+
+  "displayName": {
+    "en": "XiaoA · Knowledge Quest Coach",
+    "zh": "小A · 知识闯关教练"
+  },
+  "profession": {
+    "en": "Gamified Knowledge Learning Coach",
+    "zh": "知识游戏化学习教练"
+  },
+  "displayDescription": {
+    "en": "Turns any knowledge base into a level-based quiz H5 with AI read-aloud; delivers a WeChat-scannable QR poster and a permanent link, responsive on PC and mobile.",
+    "zh": "把知识库变闯关 H5：AI 语音朗读、微信可扫海报、双端自适应与微信可打开性体检。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "03-GameSpatial",
+  "defaultInitPrompt": {
+    "zh": "把这份知识库做成一个闯关 H5",
+    "en": "Turn this knowledge base into a gamified quiz H5"
+  },
+  "plugin": "xiaoa-knowledge-coach",
+  "tags": [
+    { "en": "Gamified Learning", "zh": "知识游戏化" },
+    { "en": "AI Speech", "zh": "AI 语音朗读" },
+    { "en": "WeChat Ready", "zh": "微信可分享" }
+  ],
+  "quickPrompts": [
+    { "en": "Turn this knowledge base into a gamified quiz H5", "zh": "把这份知识库做成一个闯关 H5" },
+    { "en": "Make it shareable on WeChat: the QR code must scan in WeChat and the link must open inside WeChat", "zh": "重点做成微信里也能用：二维码要能被微信扫出来，链接在微信里要能打开" },
+    { "en": "Add AI read-aloud that switches voice between Chinese and English automatically", "zh": "加上 AI 语音朗读，中英文要自动切换音色" }
+  ]
+}

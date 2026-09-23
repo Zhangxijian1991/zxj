@@ -1,0 +1,9 @@
+{
+  "name": "knowledge-to-agent",
+  "displayName": "知识库→游戏化智能体 H5",
+  "version": "1.0.0",
+  "category": "content",
+  "agent_created": true,
+  "description": "把任意知识库文件（HTML/Markdown）转成游戏化、可运行智能体的单文件 H5：离线 RAG、L3 自治出卷、学习者画像、遗忘曲线星图、可插拔 AIPlugin 三实现。引擎与知识解耦，换知识库即换学科。",
+  "tags": ["h5", "agent", "knowledge", "gamification", "rag", "education"]
+}
